@@ -1,8 +1,8 @@
-import logging
+import structlog
 from typing import List
 from app.graph.state import AgentState, DecisionProposal
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 async def rule_engine_node(state: AgentState) -> AgentState:
     """

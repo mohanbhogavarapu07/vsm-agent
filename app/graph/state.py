@@ -41,6 +41,7 @@ class AgentState(TypedDict, total=False):
     llm_reasoning: Optional[str]
     candidate_transitions: List[dict]
     selected_transition: Optional[dict]
+    status: str
     
     # Results
     validation_result: ValidationResult

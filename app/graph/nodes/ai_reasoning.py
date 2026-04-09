@@ -1,4 +1,4 @@
-import logging
+import structlog
 import json
 import langchain
 from typing import Optional
@@ -11,7 +11,7 @@ from langchain_anthropic import ChatAnthropic
 from app.config import get_agent_settings
 from app.graph.state import AgentState
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 settings = get_agent_settings()
 
 # Patch for langchain_core version mismatch
@@ -77,10 +77,10 @@ async def ai_reasoning_node(state: AgentState) -> AgentState:
     
     try:
         response = await chain.ainvoke({
-            "current_stage": json.dumps(current_stage),
-            "workflow_graph": json.dumps(workflow_graph),
-            "signals": json.dumps([s.model_dump() for s in signals]),
-            "violations": json.dumps(violations)
+            "current_stage": json.dumps(current_stage, default=str),
+            "workflow_graph": json.dumps(workflow_graph, default=str),
+            "signals": json.dumps([s.model_dump() for s in signals], default=str),
+            "violations": json.dumps(violations, default=str)
         })
         
         # 3. Parse and Validate

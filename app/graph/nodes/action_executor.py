@@ -1,7 +1,7 @@
-import logging
+import structlog
 from app.graph.state import AgentState, DecisionProposal
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 async def action_executor_node(state: AgentState) -> AgentState:
     """

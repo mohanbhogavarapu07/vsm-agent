@@ -1,10 +1,10 @@
-import logging
+import structlog
 from typing import List
 from difflib import SequenceMatcher
 from app.database import get_prisma
 from app.graph.state import AgentState, Signal, DecisionProposal
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 def get_similarity(a: str, b: str) -> float:
     return SequenceMatcher(None, a.lower(), b.lower()).ratio()

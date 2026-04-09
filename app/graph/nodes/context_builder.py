@@ -1,9 +1,9 @@
-import logging
+import structlog
 from prisma.enums import WorkflowReadiness
 from app.database import get_prisma
 from app.graph.state import AgentState, DecisionProposal
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 async def context_builder_node(state: AgentState) -> AgentState:
     """
