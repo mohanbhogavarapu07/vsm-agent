@@ -22,11 +22,11 @@ class InferRequest(BaseModel):
 
 @router.post(
     "/infer",
-    response_model=DecisionProposal,
+    response_model=Any,
     status_code=status.HTTP_200_OK,
     summary="Run AI agent inference on GitHub event",
 )
-async def infer(request: InferRequest) -> DecisionProposal:
+async def infer(request: InferRequest, simulate: bool = False) -> Any:
     """
     Step 5 Node 6 endpoint.
     Runs the full 6-node LangGraph pipeline.
@@ -75,6 +75,14 @@ async def infer(request: InferRequest) -> DecisionProposal:
             detail="Agent graph completed without a proposal",
         )
 
-    # Note: DecisionProposal might be a dict or Pydantic model depending on how state is handled.
-    # Pydantic v2 will handle it if it matches the schema.
+    if simulate:
+        # Return the entire internal state to visualize decision bounds
+        return {
+            "proposal": proposal,
+            "fused_signal_score": final_state.get("fused_signal_score"),
+            "intent_scores": final_state.get("intent_scores"),
+            "allowed_next_stages": final_state.get("allowed_next_stages"),
+            "historical_context": final_state.get("historical_context")
+        }
+
     return proposal
